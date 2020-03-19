@@ -3,13 +3,16 @@ export default class DrawBoard {
         this.canvas = canvas
         this.ctx = this.canvas.getContext('2d')
         this.draw = this.draw.bind(this)
+        this.drawRect = this.drawRect.bind(this)
         this.startDraw = this.startDraw.bind(this)
         this.endDraw = this.endDraw.bind(this)
-        this.cursorWidth = 10
+        this.cursorWidth = 5
     }
 
     drawRect(x, y) {
-        this.ctx.arc(x, y, this.cursorWidth, 0, Math.PI+(Math.PI*j)/2)
+        this.ctx.beginPath()
+        this.ctx.arc(x, y, this.cursorWidth, 0, 2*Math.PI)
+        this.ctx.fill()
     }
     //Full clear
     clearBoard(){
@@ -36,5 +39,13 @@ export default class DrawBoard {
     //Customize drawing pen
     set color (color) {
         this.ctx.fillStyle = color
+    }
+
+    // get cursorWidth () {
+    //     return this.cursorWidth
+    // }
+
+    setCursorWidth (w) {
+        this.cursorWidth = w
     }
 }

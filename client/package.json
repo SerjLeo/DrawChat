@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "npx webpack --mode development",
-    "build": "npx webpack --mode production"
+    "build": "npx webpack --mode production",
+    "watch": "npx webpack --watch"
   },
   "keywords": [
     "js",

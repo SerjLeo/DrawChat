@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Baloo';
+    src: url("../assets/fonts/Baloo-Regular.ttf") format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url("../assets/fonts/Roboto-Regular.ttf") format('truetype');
+}

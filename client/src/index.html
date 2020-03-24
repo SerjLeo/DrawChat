@@ -16,13 +16,22 @@
         </header>
         <div class="canvas-container">
             <div class="canvas-toolbar">
-                <div class="btn clear"></div>
+                <!-- <div class="btn clear"></div>
                 <input type="color" class="btn color">
                 <form>
                     <input type="range" class="range" value="5" min="1" max="25">
-                </form>
+                </form> -->
+                <button class="takeSnapshot">Take snapshot</button>
+                <button class="restoreSnapshot">Restore snapshot</button>
+                <button class="clear">Clear</button>
+                <a href="#" class="download">
+                    <button>Save</button>
+                </a>
             </div>
-            <canvas class='canvas' width="1200" height="550"></canvas>
+            <div class="canvas-container_2">
+            <canvas class='canvas' width="400" height="400"></canvas>
+            <canvas class='canvas_2' width="400" height="400"></canvas>
+            </div>
         </div>
     </div>
 </body>

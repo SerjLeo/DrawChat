@@ -6,12 +6,15 @@ module.exports = {
     mode: 'development',
     context: path.resolve(__dirname, 'src'),
     entry: {
-        main: './index.js',
-        analytics: './analytics.js'
+        main: './script/index.js',
     },
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist')
+    },
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        port: 3000
     },
     plugins: [
         new HTMLWebpackPlugin({

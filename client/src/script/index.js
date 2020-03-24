@@ -1,71 +1,90 @@
-import {Subject} from 'rxjs'
-import {scan, startWith, shareReplay} from 'rxjs/operators'
-import Pencil from './icons/Pencil'
-import DeleteIcon from './icons/DeleteIcon'
+import PencilIcon from './icons/PencilIcon'
+// import DeleteIcon from './icons/DeleteIcon'
 import DrawBoard from './DrawBoard'
-import Chat from './Chat'
+import User from './User'
+import Alert from './Alert'
 import '../styles/styles.css'
+import Chat from './Chat'
+// import {store$} from './Store'
 
-const canvas = document.querySelector('.canvas')
-const canvas_2 = document.querySelector('.canvas_2')
+// const canvas_2 = document.querySelector('.canvas_2')
 
-//icons
-// document.querySelector('.clear').innerHTML = DeleteIcon.getIcon()
-// document.querySelector('.logo').innerHTML = Pencil.getIcon()
+// //icons
+// // document.querySelector('.clear').innerHTML = DeleteIcon.getIcon()
 
-function bufferHandler(buff, opt) {
-    opt.strokeStyle = '#fff';
-    opt.lineWidth = 1;
-    drawBoard_2.draw(buff)
-}
-
-const drawBoard = new DrawBoard(canvas, bufferHandler)
-const drawBoard_2 = new DrawBoard(canvas_2)
-
-//events
-// document.querySelector('.range').addEventListener('input', event => drawBoard.setCursorWidth(event.target.value))
-// document.querySelector('.color').addEventListener('input', event => drawBoard.color = event.target.value)
+// //events
+// // document.querySelector('.range').addEventListener('input', event => drawBoard.setCursorWidth(event.target.value))
+// // document.querySelector('.color').addEventListener('input', event => drawBoard.color = event.target.value)
 document.querySelector('.clear').addEventListener('click', () => drawBoard.clearBoard())
 document.querySelector('.takeSnapshot').addEventListener('click', () => drawBoard.stashCanvas())
 document.querySelector('.restoreSnapshot').addEventListener('click', () => drawBoard.restoreCanvas())
 document.querySelector('.download').addEventListener('click', () => drawBoard.saveImage())
 
-const initialState = []
+let name = '', user, chat, message, drawBoard
+//icons
 
-const handlers = {
-  INCREMENT: (state, action) => ([...state, action.payload]),
-  DECREMENT: state => {
-    state.shift()
-    return [...state]
-  },
-  DEFAULT: state => state
+let comigDataHandler = data => {
+  drawBoard.draw(data.message.drawBuffer);
+}
+const canvas = document.querySelector('.canvas')
+document.querySelector('.logo').innerHTML = PencilIcon.getIcon()
+//Login form actions
+document.querySelector('.input').addEventListener('input', e => name = e.target.value)
+document.querySelector('.message-input').addEventListener('input', e => message = e.target.value)
+document.querySelector('.welcome-form').addEventListener('submit', async e => {
+    e.preventDefault()
+    name = name.trim()
+    if(name === '')
+        new Alert('Empty name is not allowed', 'Error', 3000).showAlert()
+    else {
+      user = new User(name)
+      const isAuth = await user.login()
+      if(isAuth) {
+        login()
+        document.querySelector('.input').value = ''
+        name = ''
+        chat = new Chat(comigDataHandler)
+        drawBoard = new DrawBoard(canvas, (buffer, options) => {
+          chat.sendDrawBuffer(buffer, options)
+        })
+      } else {
+        new Alert('Something wrong with server', 'error', 4000).showAlert()
+      }
+    }
+
+})
+document.querySelector('.logout').addEventListener('click', e => {
+  e.preventDefault();
+  user.logout()
+  user = null
+  logout()
+})
+document.querySelector('.chat-form').addEventListener('submit', e => {
+    e.preventDefault()
+    message = message.trim()
+    if(message === '')
+        new Alert('Empty message is not allowed', 'Error', 3000).showAlert()
+    else {
+      chat.sendMessage(message)
+      document.querySelector('.message-input').value = ''
+      message = ''
+    }
+})
+
+const login = () => {
+  document.querySelector('.welcome-container').setAttribute("style", "visibility: hidden;opacity: 0;")
+  document.querySelector('.chat-container').setAttribute("style", "visibility: visible;opacity: 1;")
 }
 
-function reducer(state = initialState, action) {
-  const handler = handlers[action.type] || handlers.DEFAULT
-  return handler(state, action)
+const logout = () => {
+  document.querySelector('.chat-container').setAttribute("style", "visibility: hidden;opacity: 0;")
+  document.querySelector('.welcome-container').setAttribute("style", "visibility: visible;opacity: 1;")
 }
 
-function createStore(rootReducer) {
-  const subj$ = new Subject()
+document.querySelector('.close-chat').addEventListener('click', () => {
+  document.querySelector('.chat-wrapper').setAttribute("style", "transform: translateX(0)")
+})
 
-  const store$ = subj$.pipe(
-    startWith({type: '__INIT__'}),
-    scan(rootReducer, undefined),
-    shareReplay(1)
-  )
-
-  store$.dispatch = action => subj$.next(action)
-
-  return store$
-}
-
-const store$ = createStore(reducer)
-
-store$.subscribe(state => {
-  console.log(state)
-  if(state.length > 0) {
-      canvas.draw(state[0])
-    // setTimeout(() => store$.dispatch({type: 'DECREMENT'}), 1000)
-  }
+document.querySelector('.open-chat').addEventListener('click', () => {
+  document.querySelector('.chat-wrapper').setAttribute("style", "transform: translateX(-500px)")
 })

@@ -1,38 +1,63 @@
+  
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DrawChat</title>
-</head>
-<body>
-    <div class="container">
-        <header class="header">
-            <h1>Welcome to DrawChat</h1>
-            <div class="logo-container">
+  <head>
+      <meta charset="utf-8">
+      <title>DrawChat</title>
+  </head>
+  <body>
+    <div class="welcome-container">
+      <div class="welcome-form-wrapper">
+        <div class="header">
+            <h1>Welcome to LiveChat
                 <div class="logo"></div>
-            </div>
-            <div class="status"></div>
-        </header>
-        <div class="canvas-container">
+            </h1>
+        </div>
+        <form autocomplete="off" class="welcome-form">
+          <div class="input-field">
+            <input type="text" class="input" required="">
+            <label>Enter your nickname</label>
+            <span></span>
+          </div>
+          <button type="submit" class="button">Connect to chat</button>
+        </form>
+      </div>
+    </div>
+    <div class="chat-container">
+        <div class="chat-toolbar">
+            <button class="logout button">Logout</button>
+        </div>
+        <div class="canvas-wrapper">
             <div class="canvas-toolbar">
                 <!-- <div class="btn clear"></div>
                 <input type="color" class="btn color">
                 <form>
                     <input type="range" class="range" value="5" min="1" max="25">
                 </form> -->
-                <button class="takeSnapshot">Take snapshot</button>
-                <button class="restoreSnapshot">Restore snapshot</button>
-                <button class="clear">Clear</button>
-                <a href="#" class="download">
-                    <button>Save</button>
+                <button class="takeSnapshot button">Take snapshot</button>
+                <button class="restoreSnapshot button">Restore snapshot</button>
+                <button class="clear button">Clear</button>
+                <a href="#" class="download ">
+                    <button class="button">Save</button>
                 </a>
             </div>
-            <div class="canvas-container_2">
-            <canvas class='canvas' width="400" height="400"></canvas>
-            <canvas class='canvas_2' width="400" height="400"></canvas>
-            </div>
+            <canvas class="canvas"></canvas>
+        </div>
+        <button class="open-chat button">Open chat</button>
+        <div class="chat-wrapper">
+            <button class="close-chat button">Close</button>
+            <div class="chat"></div>
+            <form autocomplete="off" class="chat-form">
+                <div class="chat-input">
+                <div class="chat-input-wrapper">
+                    <input type="text" class="message-input" placeholder="Print message">
+                    <span></span>
+                </div>
+                <button type="submit" class="button">Send</button>
+                </div>
+            </form> 
         </div>
     </div>
-</body>
+    <div class="alert"></div>
+  </body>
 </html>

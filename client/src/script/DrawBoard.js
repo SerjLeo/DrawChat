@@ -1,12 +1,16 @@
+// import { drawCompleted, addToQueue, initiateRender} from './Store'
+
 export default class DrawBoard {
     constructor(canvas, bufferHandler, options){
         this.canvas = canvas
         this.ctx = this.canvas.getContext('2d')
+
+        this.canvas.width = this.canvas.getBoundingClientRect().width * window.devicePixelRatio
+        this.canvas.height = this.canvas.getBoundingClientRect().height * window.devicePixelRatio
+        
         this.mouseMoveHandler = this.mouseMoveHandler.bind(this)
         this.mouseDownHandler = this.mouseDownHandler.bind(this)
         this.mouseUpHandler = this.mouseUpHandler.bind(this)
-        // this.drawRect = this.drawRect.bind(this)
-        // this.startDraw = this.startDraw.bind(this)
         // this.endDraw = this.endDraw.bind(this)
         // this._cursorWidth = 5
         this.bufferHandler = bufferHandler || null;
@@ -72,6 +76,7 @@ export default class DrawBoard {
         return [canvasX, canvasY];
     };
     render(buffer, offsetX, offsetY) {
+        console.log('render is active');
         if (buffer.length === 0) {
             return;
         }
@@ -81,42 +86,34 @@ export default class DrawBoard {
         this.ctx.moveTo(buffer[0][0]+offsetX, buffer[0][1]+offsetY);
         this.ctx.stroke();
 
-        // for(let i = 1; i<buffer.length; i++) {
-        //     this.ctx.lineTo(buffer[i][0]+offsetX, buffer[i][1]+offsetY);
-        //     this.ctx.stroke();
-        // }
-        // this.ctx.closePath();
-
-        let i = 1
-        let interval = setInterval(() => {
-            if(buffer[i]){
-                this.ctx.lineTo(buffer[i][0]+offsetX, buffer[i][1]+offsetY);
-                this.ctx.stroke();
-                i++
-            } else {
-                clearInterval(interval)
-                this.ctx.closePath();
-                store$.dispatch({type: 'DECREMENT'})
-            }
-        }, 10)
+        for(let i = 1; i<buffer.length; i++) {
+            this.ctx.lineTo(buffer[i][0]+offsetX, buffer[i][1]+offsetY);
+            this.ctx.stroke();
+        }
+        this.ctx.closePath();
+        // drawCompleted()
+        // let i = 1
+        // let interval = setInterval(() => {
+        //     if(buffer[i]){
+        //         this.ctx.lineTo(buffer[i][0]+offsetX, buffer[i][1]+offsetY);
+        //         this.ctx.stroke();
+        //         i++
+        //     } else {
+        //         clearInterval(interval)
+        //         this.ctx.closePath();
+        //         drawCompleted()
+        //     }
+        // }, 1)
     };
     draw(buffer, drawOptions) {
-        
+        // initiateRender()
         const options = Object.assign({}, this.options, drawOptions);
-    
         const offX = options.offsetX ? parseInt(options.offsetX, 10) : 0;
         const offY = options.offsetY ? parseInt(options.offsetY, 10) : 0;
     
         this.setCanvasOptions(options);
-
-        
         this.render(buffer, offX, offY);
     
-        // if (this.canvasSnapShot) {
-        //     this.stashCanvas();
-        //     this.setCanvasOptions(this.options);
-        //     this.render(this.drawBuffer);
-        // }
     };
 
     //Define and bind event handlers
@@ -137,7 +134,7 @@ export default class DrawBoard {
             return null;
         }
         this.ctx.closePath()
-        store$.dispatch({type: 'INCREMENT', payload: this.drawBuffer})
+        // addToQueue(this.drawBuffer)
         if (this.bufferHandler) {
             this.bufferHandler(this.drawBuffer.slice(), {
                 strokeStyle: this.options.strokeStyle,
@@ -151,7 +148,7 @@ export default class DrawBoard {
                 height: this.height
             });
         }
-        this.drawBuffer.length = 0;    
+        this.drawBuffer = [];
         this.canvas.removeEventListener('mousemove', this.mouseMoveHandler)
     }
     mouseMoveHandler(e){

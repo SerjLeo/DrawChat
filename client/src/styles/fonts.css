@@ -7,3 +7,8 @@
     font-family: 'Roboto';
     src: url("../assets/fonts/Roboto-Regular.ttf") format('truetype');
 }
+
+@font-face{
+    font-family: 'Comforta';
+    src: url('../assets/fonts/Comfortaa-Regular.ttf') format('truetype');
+}

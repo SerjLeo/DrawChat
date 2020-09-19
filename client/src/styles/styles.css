@@ -67,10 +67,15 @@ svg {
     color: rgb(162, 211, 117);
     font-size: 16px;
     cursor: pointer;
+    margin-right: 16px;
 }
+
 .button:hover {
     background: #555;
     transition: all 0.5s ease;
+}
+a.button {
+    margin-right: 0;
 }
 .welcome-container {
     position: absolute;
@@ -188,7 +193,7 @@ svg {
 }
 /* Chat */
 .chat-wrapper {
-    position: absolute;
+    position: fixed;
     top: 0; right: -500px;
     width: 500px;
     height: 100vh;
